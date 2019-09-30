@@ -1,0 +1,40 @@
+1.rails -v -> Check version
+2.gem update rails -> Update Rails 
+3.rails new <project_name> -G --database=postgresql
+4.bundle exec rails db:create
+5. remove "<%= javascript_include_tag "application" %>" since not using JS right now
+6. add 'better_errors', 'binding_of_caller', 'pry-rails', 'annotate', etc in development
+7. bundle install
+8. rails server -> startup server, check localhost:3000 to see
+https://api.rubyonrails.org/
+https://edgeguides.rubyonrails.org/6_0_release_notes.html
+https://assets.aaonline.io/fullstack/rails/assets/rails_diagram.png
+Router -> paths a user takes that are attached to code that will be triggered when 
+a user reaches specific route
+Dispatcher -> Decides which controller should handle request from a route
+
+API -> Application Programming Interface
+Published set of rules for a particular set of software works
+Ex. Ruby object API is public methods
+For a Rails app/website, API would be routes. Ex. GET /cats
+
+Web Service vs Web Site
+Web Site -> get back HTML, CSS, JS, images, and rendered
+Web Service/API -> get back raw data like JSON
+
+Can split up application into multiple web services
+Mobile App, server <-> server communication, client side rendering
+
+Client -> HTTP request to server
+Server -> HTTP response to client
+
+Request has a method(GET, PUT, POST, PATCH, etc), a path, query string, 
+body (usually key-value pairs. Can't have in GET requests)
+
+Response -> status(what happened, usually a number + code), body
+
+HTTP Request -> Rails Router(path, method) -> Create Controller and call action
+
+routes.rb file -> list of routes to check
+DSL to determine routes!
+name of HTTP method -> path -> controller#controller_method
