@@ -38,3 +38,274 @@ HTTP Request -> Rails Router(path, method) -> Create Controller and call action
 routes.rb file -> list of routes to check
 DSL to determine routes!
 name of HTTP method -> path -> controller#controller_method
+
+REST -> to specify routes! 
+get table_name -> index -> get all 
+get table_name/:id -> show -> show one
+post table_name -> create 
+patch table_name/:id -> update 
+put table_name/:id -> update 
+delete table_name/:id -> destroy
+
+resources table_name, only: [method_names] -> Can make like this if you don't 
+use ad-hoc routes
+
+Nested? Ex. 
+resources :table_name do 
+  resources :another_table_name, only [:method_names] usually :index
+end
+
+Nest collection routes, but not other routes! Think about why this is. -> 
+You only need ID to do the rest!
+
+Ex. get 'silly', to: 'silly#fun' -> get request to silly path to controller silly 
+using fun method
+
+To make a controller, have it be the same name as table with _controller after!
+https://gist.github.com/iangreenleaf/b206d09c587e8fc6399e#file-gistfile1-md
+Rails naming conventions ^^^
+Even singular routes match to a plural controller by default!
+Inherit from ApplicationController to make a controller!
+
+params -> hash-like object given from router to controller, has 
+1) query string 
+2) request body 
+3) URL params/route params (wildcards)
+params[:whatever] to access...
+?message=hi&fun=potato in query string
+send k/v during request
+:id -> wildcard
+
+index : .all 
+show : .find_by(id: params[:id])
+create : .new(class_name_params), .save
+update : .find_by, .update(class_name_params)
+destroy : .find_by, .destroy
+.errors.full_messages -> print out said messages on failed instance
+class_name_params : params.require(class_name).permit(attributes)
+think  params[:class_name] has these [attributes]
+REQUIRE top level key of :class_name then put in attributes under said class name
+
+render json:
+render text:
+
+bundle exec rails routes -> see all routes
+
+Rails router recognizes URLs and chooses a controller method to which the 
+request is dispatched for processing.
+
+GET /photos index -> list of all photos 
+GET /photos/new new -> HTML Form for new photo 
+POST /photos create -> upload and create a new photo 
+GET photos/:id show -> display a specific photo 
+GET /photos/:id/edit -> HTML Form for editing a photo 
+PATCH or PUT /photos/:id -> update a specific photo 
+DELETE /photos/:id -> delete a specific photo
+New/Edit are just forms!
+
+REST Philosophy -> even more complicated actions thought in terms of CRUD
+URLs refer to either collections of resources or single instances of resources
+Diff HTTP methods = diff actions you can do to collection/instance
+
+Specifying resource -> create routing helper methods -> 
+photos_url, new_photo_url, photo_url(@photo), edit_photo_url(@photo)
+The plural and the singular simply makes sense. -> Remember that regardless 
+in the link, photos is always used.
+Do not write URLs by hand in Rails...
+
+4 URLs -> 7 actions
+Most methods that take a URL will also accept a :method option
+
+Ex. of embedding query-string option into url-helper
+photos_url(recent: true) == http://www.example-site.com/photos?recent=true
+
+Don't use _path, be consistent and just use _url all the time.
+Ex. path will give /photos while url will give http://www.example-site.com/photos
+Can tack _url to the route name to get the routing helper!
+
+No create_user URL name -> create corresponds to a POST request on /users, which 
+utilizes users_url
+
+Specify controller action that Rails should run for GET / by using the root 
+method. Ex. root to: 'posts#index' means that this invokes PostsController's index 
+method when root URL is requested
+
+Controllers are doers -> ask model to fetch data, process user input to 
+save new data, build/send a response, redirect user, etc
+
+Pluralize name of method and tack on controller
+Usually only create/update has a request body due to forms
+
+Setting instance variables in controller does not affect processing of 
+future requests -> controller instance is discarded after every request! 
+State is saved in database(server-side) or cookie(client-side)
+
+Callbacks -> methods that get called at certain moments of an object's life 
+cycle -> write code to run whenever an active record object is created/saved/updated/
+deleted/validated/loaded
+
+Ex. dependent: :destroy/:nullify/:restrict, usually used on a has_many
+Very rarely added to belongs_to
+
+To guarantee "referential integrity", enforce constraint at DB level.
+FOREIGN KEY constraint!
+
+Callback registration -> can hook into other model lifecycle events
+Impelment callbacks as ordinary methods then use a macro-style class method to 
+register them as callbacks 
+Ie. 
+protected or private
+def ensure_random_code then at top: before_validation :ensure_random_code
+
+Most common ActiveRecord callbacks: before_validation, after_create, after_destroy
+Can also specific on certain operations, ie. before_validation(on: :create)
+
+Delegation -> create getters so Law of Demeter isn't violated
+In associations, can use delegate in this way as well!
+can delegate :number, :address, to: :office, prefix: true
+This will delegate office's number/address methods to the current class, and add 
+a prefix
+So you can call doctor_instance.office_number, doctor_instance.office_address
+Then can further delegate these created methods too! They're just a shortcut.
+Essentially in code, they'd be very simple to create! 
+Just do def office_number then call office.number.
+
+DNS -> domain name system -> naming system that translates domain names to IP 
+addresses 
+Domain name consists of 1+ labels typically separated by dots, ie. www.example.com 
+has 3 labels. Labels ordered from right to left
+
+No one central DB of domain names/IP addresses -> set of authoritative name 
+servers for each domain that delegate authority for a subdomain to another 
+name server. Counterparts of name servers(holders of info) are DNS resolvers
+(lookers-up of info), every OS has a DNS resolver built-in as well as 
+all ISPs. Do not only query for IP addresses, but also cache recent/popular 
+results.
+
+Query journey
+DNS resolver -> DNS name server -> deliver directly if cached, else -> can either 
+change roles from holder to looker-up(recursive case) or return its best guess
+of what other nme server has appropriate info(iterative case) 
+
+Common DNS attack -> cache poisoning -> replaces valid cache entries w/ 
+corrupted data aka IP address of a diff site
+
+Domain name registration -> purchase rights to domain name thru domain name 
+registrar -> claim ownership of said domain name  -> change records stored 
+by name servers to decide what IP address said domain should point to
+
+Postman ->test route and controller actions
+4 main components
+1. request type - change dropdown to send GET/POST/PATCH/DELETE requests 
+2. request URL - change path to which request is made 
+3. body tab - input the body/data of requeest, K-V pairs in form-data sub-tab 
+4. Response - see response body and HTTP status
+Optionally, can build query string by clicking Params to right of 
+Request URL/add k-v pairs
+
+To make request out of localhost:3000, have to turn off CSRF protection 
+until it's implemented. Comment out "protect from forgery" in application_controller.rb 
+5. Hit send to make request and inspect response
+
+Do not test any routes that redirect with Postman -> it keeps the same request 
+type through redirects incorrectly
+
+JSON -> typically better for non-browser clients. You can use your own API!
+
+#to_json produces JSON string -> works on collections and individual objects
+render json: etc -> automatically calls #to_json under the hood
+
+Collection routes -> index, new, create
+Member routes -> show, edit, update, update, destroy
+Never generate any member routes when nesting! 
+:only :except options for building routes!
+
+Nested index routes! -> Yes.
+NO nested create routes -> Superfluous! Hidden field to upload the id.
+Nested new is okay -> Ex. magazines/123/articles/new should still post to /articles
+
+To add another member route, simply put 
+resources :photos do
+  member do 
+    get 'preview'
+  end 
+Would be a GET request for photos/1/preview
+For collections, change member to collection.
+
+Try to stick with RESTful routes, though.
+
+status: :unprocessable_entity, etc, learn status messages!
+inclusion validation!
+Never nest things 2 levels deep...
+
+rendering html or html.erb intead of json!
+
+erb -> embedded ruby
+<%= %> Can put Ruby code in there that's shown!
+<% %>  Ruby code not shown
+Instance variables in controller -> accessible in view
+Best to do logic in controller, view only presents information
+render :show -> show.html.erb
+Helper method: Ex. cats_url, cat_url(:id), etc
+
+Forms! Ex. 
+new -> /cats/new 
+edit -> /cats/:id/edit
+
+Ex.
+<form action="/cats" method="POST">
+  <input type="text" name="cat[name]"> Means to nest data in cat
+  <input type="submit" value="Create Cat"
+</form>
+
+1. GET cats/new to fetch orm 
+2. User fills out form, clciks submit 
+3. POST /cats the data in the form 
+4. Create action is invoked, cat is created
+5. Send client a redirect to /cat/:id 
+6. Client amkes a get request for /cats/:id 
+7. Show action for newly created cat is invoked
+
+When you do something like render :show, you can't calling the show method, but 
+simply rendering the show template.
+Meaning instead of rendering, should redirect! 
+redirect_to -> contains another URL, method is called!
+
+Forms can only make GET or POST requests! To make other requests like delete, 
+you'd have to 
+<input type="hidden" name="_method" value="DELETE"
+
+When you just render instead of redirect, you keep all the old information! 
+No need for people to fill out information again.
+
+Add a value, Etc. 
+value="<%=@cat.name%> -> Blank so nil, when render again, what was filled out 
+will stay filled out even after incorrect submit.
+
+Each HTTP request is stateless! 
+Can't redirect or render, can't do both!
+
+in select, option, value="whatever", if etc == etc, selected
+This allows default even in select dropdown lists!
+Iterate through a list that's initialized in controllers to make things easier--
+write more Ruby less HTML.
+
+Form partials 
+--------------
+#persisted? -> Saved to database or not
+action_url = ?? cat_url(@cat) if persisted, else cats_url
+method = ?? "PATCH" if persisted, else "POST"
+submit_text = ?? "UPDATED" if persisted, else "CREATED"
+
+Partials always start with an underscore _, live in same directory as views. 
+render :form to render _form.html.erb
+When rendering a partial, send in instance variable and give another name. Ex. 
+<%= render "form", cat: @cat %> Then inside the partial, can just call cat
+So you use things within scope, less error-prone.
+
+How rack encodes and parses forms! -> Creates nested structures 
+
+Intersectionality, how you describe something changes it completely, levels of 
+female harassment in tech, why diversity is needed in product design (think 
+testing car seat belt tests for men/women, computer vision failing to recognize 
+certain races as people, etc)
