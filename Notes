@@ -309,3 +309,11 @@ Intersectionality, how you describe something changes it completely, levels of
 female harassment in tech, why diversity is needed in product design (think 
 testing car seat belt tests for men/women, computer vision failing to recognize 
 certain races as people, etc)
+
+Learning Goals:
+Be able to create routes in routes.rb
+Be able to read/understand Rails server error messages 
+Know the 3 places that params come from 
+Be able to nesty query parameters 
+Be ablet o write controller actions that read/write to the database 
+Know how and when to render errors
