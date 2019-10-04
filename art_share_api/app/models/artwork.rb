@@ -34,4 +34,10 @@ class Artwork < ApplicationRecord
   has_many :users_who_liked,
   through: :likes,
   source: :user
+
+  # In my solution, I used two user associations + uniq, which is inefficient.
+  # Instructor solution for "return all artworks made by user or shared with user"
+  # Artwork -> left outer joins with artwork shares (Keep artwork even w/ no shares)
+  # where -> artworks.artist_id = :user_id OR artwork_shares.viewer_id = :user_id
+  # distinct -> To make all unique
 end

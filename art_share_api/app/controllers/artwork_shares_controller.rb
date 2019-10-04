@@ -18,6 +18,16 @@ class ArtworkSharesController < ApplicationController
     end
   end
 
+  def favorite
+    artwork_share = ArtworkShare.find_by(id: params[:id])
+    if artwork_share 
+      artwork_share.update_attributes(favorite: true)
+      render json: artwork_share
+    else
+      render json: "Not found!", status: :not_found
+    end
+  end
+
   private
 
   def artwork_share_params

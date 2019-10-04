@@ -32,6 +32,11 @@ class User < ApplicationRecord
 
   has_many :likes
 
+  # liked_comments can be implemented with an association like
+  # has_many :liked_comments,
+  # through: :likes,
+  # source: :likeable, 
+  # source_type: :'Comment'
   def liked_comments
     likes.where(likeable_type: 'Comment')
   end

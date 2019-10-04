@@ -7,9 +7,12 @@ Rails.application.routes.draw do
 
   resources :artworks, except: [:new, :edit, :index] do 
     resources :comments, only: [:index]
+    patch 'favorite', on: :member
   end
 
-  resources :artwork_shares, only: [:create, :destroy]
+  resources :artwork_shares, only: [:create, :destroy] do 
+    patch 'favorite', on: :member
+  end
 
   resources :comments, only: [:create, :destroy, :index]
 end

@@ -54,6 +54,16 @@ class ArtworksController < ApplicationController
     end
   end
 
+  def favorite
+    artwork = Artwork.find_by(id: params[:id])
+    if artwork 
+      artwork.update_attributes(favorite: true)
+      render json: artwork
+    else
+      render json: "Not found!", status: :not_found
+    end
+  end
+
   private
 
   def artwork_params
