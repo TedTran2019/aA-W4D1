@@ -1,7 +1,16 @@
 class ArtworksController < ApplicationController
+  # All artworks owned by and shared with a user
+  # What if user views an artwork he owns? -> #uniq
   def index
-    artworks = Artwork.where(artist_id: params[:user_id])
-    render json: artworks
+    # owned_artworks = Artwork.where(artist_id: params[:user_id])
+    user = User.find_by(id: params[:user_id])
+    if user
+      owned_artworks = user.artworks
+      shared_artworks = user.shared_artworks
+      render json: (owned_artworks + shared_artworks).uniq
+    else
+      render json: "This artist doesn't exist!" 
+    end
   end
 
   def show

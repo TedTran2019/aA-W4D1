@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   end
 
   resources :artworks, except: [:new, :edit, :index]
+
+  resources :artwork_shares, only: [:create, :destroy]
 end
