@@ -317,3 +317,47 @@ Know the 3 places that params come from
 Be able to nesty query parameters 
 Be ablet o write controller actions that read/write to the database 
 Know how and when to render errors
+
+In config/application.rb
+config.action_controller.default_protect_from_forgery = false
+For now...
+
+Each route -> API endpoint which encapsulates a single action your app can take
+
+Rails server -> creatse instance of Router that holds instances of Routes defined 
+by routes.rb -> request comes in and Router matches a route based on HTTP method 
+and url path with REGEX -> fist matched route instantiates an instance of 
+controller and calls action
+
+Each API endpoint CRUDs a resource
+
+Put helper methods in ApplicationController to share across all controllers
+
+rails server! (loads in development mode)
+Listening to quests at http://0.0.0.0:3000, aka
+
+Always be looking at the server log!
+
+In the absence of an explicit render, controller will by default try to 
+render a template w/ same name as controller action. 
+Ie. for index, index.html.erb 
+
+render text: is depreciated, used plain: instead
+
+params 
+------
+Route parameters (e.g. the :id from /users/:id)
+Query string (the part of the URL after the ?: ?key=value)
+POST/PATCH request data (the body of the HTTP request).
+
+params also consists of the controller and the action as well
+
+Nested parameters -> [][][] etc. Just keep nesting dat dict.
+
+Nest under an inner hash to use mass assignment!
+
+Default status code: 200 (OK)
+https://guides.rubyonrails.org/layouts_and_rendering.html#the-status-option
+
+After destroying in DB, you can still render the object you have.
+Always render or redirect! 
