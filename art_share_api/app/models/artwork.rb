@@ -28,4 +28,10 @@ class Artwork < ApplicationRecord
 
   has_many :comments,
   dependent: :destroy
+
+  has_many :likes, as: :likeable
+
+  has_many :users_who_liked,
+  through: :likes,
+  source: :user
 end

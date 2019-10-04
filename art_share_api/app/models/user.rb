@@ -29,4 +29,14 @@ class User < ApplicationRecord
   has_many :comments,
   foreign_key: :author_id,
   dependent: :destroy
+
+  has_many :likes
+
+  def liked_comments
+    likes.where(likeable_type: 'Comment')
+  end
+
+  def liked_artworks
+    likes.where(likeable_type: 'Artwork')
+  end
 end
