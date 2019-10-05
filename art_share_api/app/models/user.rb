@@ -44,4 +44,14 @@ class User < ApplicationRecord
   def liked_artworks
     likes.where(likeable_type: 'Artwork')
   end
+
+  has_many :collections
+
+  has_many :artwork_collections,
+  through: :collections,
+  source: :artwork_collections
+
+  has_many :artworks_in_collection,
+  through: :artwork_collections,
+  source: :artwork
 end

@@ -8,6 +8,7 @@
 #  artist_id  :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  favorite   :boolean          default("false"), not null
 #
 
 class Artwork < ApplicationRecord
@@ -34,6 +35,8 @@ class Artwork < ApplicationRecord
   has_many :users_who_liked,
   through: :likes,
   source: :user
+
+  has_many :artwork_collections
 
   # In my solution, I used two user associations + uniq, which is inefficient.
   # Instructor solution for "return all artworks made by user or shared with user"
