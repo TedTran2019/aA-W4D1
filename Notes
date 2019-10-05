@@ -361,3 +361,52 @@ https://guides.rubyonrails.org/layouts_and_rendering.html#the-status-option
 
 After destroying in DB, you can still render the object you have.
 Always render or redirect! 
+
+Usage of update_attributes over update
+Returns false if save failed! Rather than update that just returns the object 
+no matter what
+
+Learning Goals
+Be able to write Active Record models quickly
+Know how to write a user_params method
+Be able to write the five API RESTful controller methods
+Know how to test your API endpoints with Postman
+Know how to create and destroy join table records via controller methods
+Know how a nested route works
+
+https://stackoverflow.com/questions/6169996/index-on-multiple-columns-in-ruby-on-rails
+For multiple column indexes, index the one that narrows the rows more first.
+
+#find_by only returns the first
+Use #where if you wish to have an array/collection returned
+
+#uniq method works just fine for Active Record objects
+
+Can setup multiple routes to same controller action! Then take action depending 
+on what the params are...
+
+Remember that in real world development, most things won't be implemented on your 
+own but aided by libraries. Like, you wouldn't be doing authentication yourself.
+
+Hmm.. I guess you could put anything after the ? then check for it.
+Ex. ?query=Te
+Remember "%" wildcard matcher in SQL.
+
+Polymorphic Association -> a model can belong to more than one other model, 
+on a single association.
+Ie. a polymorphic belongs_to declaration sets up an interface that any other model 
+can use.
+https://guides.rubyonrails.org/association_basics.html#polymorphic-associations
+
+PUT VS PATCH 
+Put remakes the item completely, patch updates it.
+
+It's important to dependent: :destroy, think about it once most things are setup.
+
+So far the process seems like 
+1. Start a new rails project, add in useful gems
+2. Setup database through migrations, seeding, etc. Making sure to index/constraint 
+3. Setup models, making sure to validate/make associations
+4. Setup server
+5. Setup routes, nested and non-RESTful as well
+6. Setup controllers, CRUD -> new/edit
